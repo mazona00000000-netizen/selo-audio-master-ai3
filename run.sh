@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+# تشغيل استوديو الراوي (ماك / لينكس)
+cd "$(dirname "$0")" || exit 1
+python3 -m app.server "$@"
