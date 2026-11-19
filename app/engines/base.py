@@ -3,13 +3,18 @@
 from __future__ import annotations
 
 import os
+import sys
 from pathlib import Path
 
 import numpy as np
 
 from ..cues import Profile
 
-ROOT = Path(__file__).resolve().parent.parent.parent
+if getattr(sys, "frozen", False):
+    ROOT = Path(os.environ.get("LOCALAPPDATA", Path.home())) / "SELO AUDIO MASTER AI" / "data"
+    ROOT.mkdir(parents=True, exist_ok=True)
+else:
+    ROOT = Path(__file__).resolve().parent.parent.parent
 
 
 def references_dir() -> Path:
