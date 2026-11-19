@@ -10,6 +10,7 @@ import argparse
 import json
 import os
 import re
+import sys
 import threading
 import time
 import uuid
@@ -25,7 +26,7 @@ from .engines.base import ROOT
 from .render import Cancelled, render_script
 from .script import parse_script, unknown_cues
 
-STATIC = ROOT / "static"
+STATIC = Path(getattr(sys, "_MEIPASS", ROOT)) / "static"
 OUTPUTS = ROOT / "outputs"
 MAX_BODY = 2 * 1024 * 1024
 GENERATION_LOCK = threading.Lock()  # موديل واحد على الجهاز: مهمة واحدة في المرة
