@@ -35,6 +35,9 @@ jobs:
           --name "SELO AUDIO MASTER AI"
           --add-data "static;static"
           --collect-submodules app
+          --collect-all gradio_client
+          --collect-all huggingface_hub
+          --collect-all websockets
           desktop.py
       - name: Install Inno Setup
         run: choco install innosetup --yes --no-progress
