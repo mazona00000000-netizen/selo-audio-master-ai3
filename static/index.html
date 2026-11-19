@@ -1,0 +1,329 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>استوديو الراوي</title>
+<style>
+  :root {
+    --bg: #0b0e17;
+    --bg2: #121828;
+    --card: rgba(255,255,255,.045);
+    --line: rgba(255,255,255,.09);
+    --text: #eef1f8;
+    --muted: #97a1b8;
+    --gold: #f2b84b;
+    --gold2: #ff8a5b;
+    --ok: #4ade80;
+    --bad: #ff6b6b;
+    --radius: 18px;
+    font-family: "Segoe UI", Tahoma, "Noto Naskh Arabic", "Noto Sans Arabic", system-ui, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html { color-scheme: dark; }
+  body {
+    margin: 0; min-height: 100vh; color: var(--text);
+    background:
+      radial-gradient(900px 500px at 85% -10%, rgba(242,184,75,.13), transparent 60%),
+      radial-gradient(800px 500px at 0% 110%, rgba(255,138,91,.10), transparent 60%),
+      var(--bg);
+  }
+  header {
+    display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+    padding: 22px clamp(16px, 4vw, 48px);
+  }
+  .brand { display: flex; align-items: center; gap: 14px; }
+  .logo {
+    width: 46px; height: 46px; border-radius: 14px; display: grid; place-items: center; font-size: 24px;
+    background: linear-gradient(135deg, var(--gold), var(--gold2)); color: #1b1305;
+    box-shadow: 0 8px 28px rgba(242,184,75,.35);
+  }
+  h1 { margin: 0; font-size: 1.35rem; letter-spacing: .2px; }
+  .sub { margin: 2px 0 0; color: var(--muted); font-size: .85rem; }
+  .engine-box { display: flex; align-items: center; gap: 10px; }
+  .dot { width: 10px; height: 10px; border-radius: 50%; background: var(--muted); }
+  .dot.ok { background: var(--ok); box-shadow: 0 0 10px var(--ok); }
+  .dot.bad { background: var(--bad); box-shadow: 0 0 10px var(--bad); }
+
+  main {
+    display: grid; gap: 18px; padding: 0 clamp(16px, 4vw, 48px) 120px;
+    grid-template-columns: minmax(0, 1.5fr) minmax(300px, 1fr);
+    align-items: start;
+  }
+  @media (max-width: 900px) { main { grid-template-columns: 1fr; } }
+  .card {
+    background: var(--card); border: 1px solid var(--line); border-radius: var(--radius);
+    padding: 18px; backdrop-filter: blur(8px);
+  }
+  .card-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 12px; }
+  h2 { margin: 0; font-size: 1.05rem; }
+  label { display: block; color: var(--muted); font-size: .82rem; margin-bottom: 6px; }
+  select, textarea, button { font: inherit; color: inherit; }
+  select {
+    width: 100%; background: var(--bg2); border: 1px solid var(--line); border-radius: 12px;
+    padding: 10px 12px; outline: none;
+  }
+  select:focus-visible, textarea:focus-visible, button:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+  textarea {
+    width: 100%; min-height: 360px; resize: vertical; line-height: 1.95; font-size: 1.08rem;
+    background: var(--bg2); border: 1px solid var(--line); border-radius: 14px; padding: 16px;
+  }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+  .chip {
+    border: 1px solid var(--line); background: rgba(255,255,255,.04); border-radius: 999px;
+    padding: 6px 13px; cursor: pointer; font-size: .86rem; transition: .15s;
+  }
+  .chip:hover { border-color: var(--gold); background: rgba(242,184,75,.12); transform: translateY(-1px); }
+  button.ghost {
+    background: transparent; border: 1px solid var(--line); border-radius: 10px; padding: 7px 14px; cursor: pointer;
+    text-decoration: none; display: inline-block; font-size: .88rem;
+  }
+  button.ghost:hover, a.ghost:hover { border-color: var(--gold); }
+  button.primary {
+    width: 100%; margin-top: 16px; padding: 15px; border: 0; border-radius: 14px; cursor: pointer;
+    font-weight: 700; font-size: 1.05rem; color: #1b1305;
+    background: linear-gradient(135deg, var(--gold), var(--gold2));
+    box-shadow: 0 10px 30px rgba(242,184,75,.28); transition: .15s;
+  }
+  button.primary:hover:not(:disabled) { transform: translateY(-2px); }
+  button.primary:disabled { opacity: .45; cursor: not-allowed; box-shadow: none; }
+  .warn { margin-top: 12px; padding: 10px 14px; border-radius: 12px; font-size: .88rem;
+    background: rgba(255,107,107,.1); border: 1px solid rgba(255,107,107,.35); }
+  .info { margin-top: 12px; color: var(--muted); font-size: .85rem; }
+
+  .row {
+    display: grid; grid-template-columns: 28px 1fr 130px 34px; gap: 8px; align-items: center;
+    padding: 10px 0; border-top: 1px solid var(--line);
+  }
+  .row:first-child { border-top: 0; }
+  .num { color: var(--gold); font-weight: 700; text-align: center; }
+  .snip { font-size: .9rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .tags { display: block; color: var(--muted); font-size: .74rem; margin-top: 2px; white-space: normal; }
+  .row select { padding: 7px 8px; font-size: .85rem; }
+  .mini { border: 1px solid var(--line); background: transparent; border-radius: 9px; height: 34px; cursor: pointer; }
+  .mini:hover:not(:disabled) { border-color: var(--gold); color: var(--gold); }
+  .mini:disabled { opacity: .4; cursor: not-allowed; }
+  .empty { color: var(--muted); font-size: .9rem; padding: 14px 0; }
+
+  .progress { margin-top: 14px; }
+  .track { height: 9px; background: var(--bg2); border-radius: 99px; overflow: hidden; border: 1px solid var(--line); }
+  .bar { height: 100%; width: 0; background: linear-gradient(90deg, var(--gold), var(--gold2)); transition: width .3s; }
+  .ptext { display: flex; justify-content: space-between; margin-top: 6px; color: var(--muted); font-size: .82rem; }
+
+  .result { grid-column: 1 / -1; }
+  audio { width: 100%; margin: 6px 0 12px; }
+  .toast {
+    position: fixed; bottom: 22px; inset-inline: 0; margin-inline: auto; width: fit-content; max-width: 92vw;
+    background: #1d2438; border: 1px solid var(--line); padding: 12px 18px; border-radius: 14px; z-index: 5;
+    box-shadow: 0 14px 40px rgba(0,0,0,.5);
+  }
+  .toast.err { border-color: var(--bad); }
+  [hidden] { display: none !important; }
+</style>
+</head>
+<body>
+<header>
+  <div class="brand">
+    <div class="logo" aria-hidden="true">🎙</div>
+    <div>
+      <h1>استوديو الراوي</h1>
+      <p class="sub">تعليق صوتي بمشاعر من سكريبت بالأقواس</p>
+    </div>
+  </div>
+  <div class="engine-box">
+    <span id="dot" class="dot"></span>
+    <div style="min-width:240px">
+      <label for="engine" style="margin:0 0 4px">محرك الصوت</label>
+      <select id="engine"></select>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="card">
+    <div class="card-head">
+      <h2>السكريبت</h2>
+      <button class="ghost" id="sample" type="button">مثال جاهز</button>
+    </div>
+    <div class="chips" id="chips" aria-label="إضافة إحساس"></div>
+    <textarea id="script" spellcheck="false"
+      placeholder="اكتب كل سطر وقبله الإحساس بين أقواس:&#10;[هادي] في ليلة من ليالي الشتا...&#10;[صوت واطي حزين] وحشتني ضحكتك.&#10;&#10;سطر فاضي = فقرة جديدة (وليها صوت في الجدول)."></textarea>
+    <div id="warn" class="warn" hidden></div>
+    <div id="engineMsg" class="info" hidden></div>
+  </section>
+
+  <aside class="card">
+    <div class="card-head"><h2>جدول الأصوات</h2><span id="count" class="sub"></span></div>
+    <label for="defVoice">الصوت الافتراضي</label>
+    <select id="defVoice"></select>
+    <div id="table" style="margin-top:14px"></div>
+    <button class="primary" id="go" type="button" disabled>ولّد التعليق الصوتي</button>
+    <div class="progress" id="progress" hidden>
+      <div class="track"><div class="bar" id="bar"></div></div>
+      <div class="ptext"><span id="ptext">جاري التجهيز…</span><button class="ghost" id="cancel" type="button">إلغاء</button></div>
+    </div>
+  </aside>
+
+  <section class="card result" id="result" hidden>
+    <div class="card-head"><h2>النتيجة</h2></div>
+    <audio id="player" controls></audio>
+    <a class="ghost" id="dl" download style="color:inherit">تحميل WAV</a>
+  </section>
+</main>
+
+<div id="toast" class="toast" hidden role="status"></div>
+
+<script>
+const $ = (s) => document.querySelector(s);
+const state = { engines: [], voices: {}, parsed: [], busy: false, job: null };
+
+const SAMPLE = `# كل سطر قبله الإحساس بين أقواس. السطر اللي مفيهوش قوس بيتقرا عادي.
+[هادي] في ليلة من ليالي الشتا، كان الشارع ساكت خالص.
+
+[صوت واطي حزين] قعدت لوحدي أفتكر كل اللي فات.
+[وقفة]
+[صوت واطي حزين] وحشتني ضحكتك يا أمي.
+
+[تشويق] وفجأة... سمعت خبط على الباب.
+[خايف] مين؟ مين اللي بره؟
+[غضب] [صوت عالي] اطلع بره حالًا!`;
+
+function toast(msg, isErr = false) {
+  const t = $('#toast');
+  t.textContent = msg; t.className = 'toast' + (isErr ? ' err' : ''); t.hidden = false;
+  clearTimeout(toast.t); toast.t = setTimeout(() => (t.hidden = true), isErr ? 7000 : 3000);
+}
+
+async function api(path, body) {
+  const res = await fetch(path, body === undefined ? {} : {
+    method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body),
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(data.error || res.statusText);
+  return data;
+}
+
+const engine = () => state.engines.find((e) => e.name === $('#engine').value);
+
+function fillVoices(select, voices, withDefaultOption) {
+  select.innerHTML = '';
+  if (withDefaultOption) select.append(new Option('(الافتراضي)', ''));
+  voices.forEach((v) => select.append(new Option(v, v)));
+}
+
+function onEngineChange() {
+  const e = engine();
+  $('#dot').className = 'dot ' + (e && e.available ? 'ok' : 'bad');
+  const msg = $('#engineMsg');
+  msg.hidden = !e;
+  msg.textContent = e ? (e.available ? e.description : e.reason) : '';
+  fillVoices($('#defVoice'), e ? e.voices : [], false);
+  state.voices = {};
+  renderTable();
+  refreshButtons();
+}
+
+function refreshButtons() {
+  const e = engine();
+  const ready = e && e.available && state.parsed.length > 0 && !state.busy;
+  $('#go').disabled = !ready;
+  document.querySelectorAll('.mini').forEach((b) => (b.disabled = !ready));
+}
+
+function renderTable() {
+  const box = $('#table'); const e = engine();
+  $('#count').textContent = state.parsed.length ? `${state.parsed.length} فقرة` : '';
+  if (!state.parsed.length) { box.innerHTML = '<div class="empty">اكتب السكريبت وهتظهر الفقرات هنا.</div>'; return; }
+  box.innerHTML = '';
+  state.parsed.forEach((p) => {
+    const row = document.createElement('div'); row.className = 'row';
+    const tags = p.cues.length ? `<span class="tags">${p.cues.join(' · ')}</span>` : '';
+    row.innerHTML = `<span class="num">${p.index + 1}</span><div><div class="snip"></div>${tags}</div><select></select><button class="mini" type="button" title="جرّب الفقرة دي بس">▶</button>`;
+    row.querySelector('.snip').textContent = p.snippet;
+    const sel = row.querySelector('select');
+    fillVoices(sel, e ? e.voices : [], true);
+    sel.value = state.voices[p.index] || '';
+    sel.addEventListener('change', () => (state.voices[p.index] = sel.value));
+    row.querySelector('.mini').addEventListener('click', () => run(p.index));
+    box.append(row);
+  });
+  refreshButtons();
+}
+
+let parseTimer;
+function scheduleParse() {
+  clearTimeout(parseTimer);
+  parseTimer = setTimeout(async () => {
+    try {
+      const data = await api('/api/parse', { script: $('#script').value });
+      state.parsed = data.paragraphs;
+      const warn = $('#warn');
+      if (data.unknown_cues.length) {
+        warn.hidden = false;
+        warn.textContent = 'إحساس مش مفهوم عندي (هيتقرا عادي): ' + data.unknown_cues.map((c) => `[${c}]`).join('  ');
+      } else warn.hidden = true;
+      renderTable();
+    } catch (err) { toast(err.message, true); }
+  }, 350);
+}
+
+function insertCue(label) {
+  const ta = $('#script'); const s = ta.selectionStart; const e = ta.selectionEnd;
+  const text = `[${label}] `;
+  ta.setRangeText(text, s, e, 'end'); ta.focus(); scheduleParse();
+}
+
+async function run(only) {
+  if (state.busy) return;
+  const e = engine();
+  state.busy = true; refreshButtons();
+  $('#progress').hidden = false; $('#bar').style.width = '0%'; $('#ptext').textContent = 'جاري التجهيز… (أول مرة بيحمّل الموديل وده بياخد وقت)';
+  try {
+    const body = {
+      engine: e.name, script: $('#script').value, voices: state.voices, default_voice: $('#defVoice').value,
+    };
+    if (typeof only === 'number') body.only_paragraph = only;
+    let job = await api('/api/jobs', body);
+    state.job = job.id;
+    while (job.status === 'queued' || job.status === 'running') {
+      await new Promise((r) => setTimeout(r, 700));
+      job = await api('/api/jobs/' + job.id);
+      const pct = job.total ? Math.round((job.done / job.total) * 100) : 0;
+      $('#bar').style.width = pct + '%';
+      $('#ptext').textContent = job.total ? `مقطع ${job.done} من ${job.total}` : 'جاري التجهيز…';
+    }
+    if (job.status === 'error') throw new Error(job.error);
+    if (job.status === 'cancelled') { toast('اتلغت'); return; }
+    const url = `/api/jobs/${job.id}/audio`;
+    if (typeof only === 'number') { new Audio(url).play(); }
+    else {
+      $('#player').src = url; $('#dl').href = url; $('#dl').download = job.filename;
+      $('#result').hidden = false; $('#result').scrollIntoView({ behavior: 'smooth' });
+      toast('خلص! الملف اتحفظ كمان في فولدر outputs');
+    }
+  } catch (err) { toast(err.message, true); }
+  finally { state.busy = false; state.job = null; $('#progress').hidden = true; refreshButtons(); }
+}
+
+async function init() {
+  const data = await api('/api/engines');
+  state.engines = data.engines;
+  const sel = $('#engine');
+  data.engines.forEach((e) => sel.append(new Option(e.label + (e.available ? '' : ' — مش جاهز'), e.name)));
+  const first = data.engines.find((e) => e.available && e.name !== 'demo') || data.engines.find((e) => e.available);
+  if (first) sel.value = first.name;
+  data.cues.forEach((c) => {
+    const b = document.createElement('button'); b.type = 'button'; b.className = 'chip'; b.textContent = c;
+    b.addEventListener('click', () => insertCue(c)); $('#chips').append(b);
+  });
+  sel.addEventListener('change', onEngineChange);
+  $('#script').addEventListener('input', scheduleParse);
+  $('#sample').addEventListener('click', () => { $('#script').value = SAMPLE; scheduleParse(); });
+  $('#go').addEventListener('click', () => run());
+  $('#cancel').addEventListener('click', () => state.job && api(`/api/jobs/${state.job}/cancel`, {}));
+  onEngineChange();
+}
+init().catch((err) => toast('مقدرتش أكلّم السيرفر: ' + err.message, true));
+</script>
+</body>
+</html>
