@@ -4,6 +4,8 @@ A browser-based Arabic voiceover and podcast studio with script emotion cues, vo
 
 ## Web deployment (Render)
 
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/mazona00000000-netizen/selo-audio-master-ai3)
+
 This repository includes a Render Blueprint in `render.yaml`.
 
 1. Sign in to Render and connect the GitHub account that can access this repository.
